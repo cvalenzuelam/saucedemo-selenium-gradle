@@ -33,6 +33,7 @@ public class LoginPage extends BasePage {
         clickLogin();
         if (username.equals("standard_user")) {
             waitForUrlContains("inventory.html");
+            waitForPageLoad();
         }
     }
 
