@@ -15,7 +15,9 @@ public class BaseTest {
         // ya que el Selenium Manager lo descarga automáticamente.
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--headless"); 
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
         
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
