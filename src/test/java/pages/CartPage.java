@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 
 public class CartPage extends BasePage {
 
-    // Locators
     private final By checkoutButton = By.id("checkout");
 
     public CartPage(WebDriver driver) {
@@ -14,6 +13,7 @@ public class CartPage extends BasePage {
 
     public void clickCheckout() {
         click(checkoutButton);
+        // Sincronización crítica: No seguir hasta que la URL cambie
         waitForUrlContains("checkout-step-one.html");
     }
 }

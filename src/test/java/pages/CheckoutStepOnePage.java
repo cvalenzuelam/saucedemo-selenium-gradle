@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 
 public class CheckoutStepOnePage extends BasePage {
 
-    // Locators usando IDs estándar que son muy estables en Saucedemo
     private final By firstNameField = By.id("first-name");
     private final By lastNameField = By.id("last-name");
     private final By postalCodeField = By.id("postal-code");
@@ -18,13 +17,9 @@ public class CheckoutStepOnePage extends BasePage {
     }
 
     public String getErrorMessage() {
-        waitForPageLoad();
-        WebElement errorElement = wait.until(d -> {
-            WebElement e = d.findElement(errorMessageContainer);
-            String text = e.getText();
-            return (text != null && !text.trim().isEmpty()) ? e : null;
-        });
-        return errorElement.getText().trim();
+        // Esperamos a que el mensaje aparezca y tenga contenido real
+        wait.until(d -> !d.findElement(errorMessageContainer).getText().trim().isEmpty());
+        return getText(errorMessageContainer).trim();
     }
 
     public void fillInformation(String firstName, String lastName, String postalCode) {
@@ -36,5 +31,12 @@ public class CheckoutStepOnePage extends BasePage {
 
     public void clickContinue() {
         click(continueButton);
+        // Si no hay errores, Saucedemo navega a step-two
+        // Si hay errores, se queda en la misma URL (por eso no forzamos wait aquí si se usa en tests de fallo)
+    }
+
+    public void clickContinueValidating(String nextPartialUrl) {
+        click(continueButton);
+        waitForUrlContains(nextPartialUrl);
     }
 }

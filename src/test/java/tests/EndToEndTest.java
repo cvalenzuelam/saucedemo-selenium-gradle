@@ -19,19 +19,21 @@ public class EndToEndTest extends BaseTest {
         loginPage.navigateTo("https://www.saucedemo.com/");
         loginPage.login("standard_user", "secret_sauce");
         
-        // 2. Agregar al carrito
+        // 2. Agregar al carrito y Navegar
         inventoryPage.addFirstItemToCart();
         inventoryPage.goToCart();
 
-        // 3. Checkout Step One
+        // 3. Checkout Paso 1 (Formulario)
         cartPage.clickCheckout();
         checkoutStepOnePage.fillInformation("Juan", "Perez", "12345");
-        checkoutStepOnePage.clickContinue();
+        // Aseguramos que pasamos al siguiente paso antes de seguir con el test
+        checkoutStepOnePage.clickContinueValidating("checkout-step-two.html");
 
-        // 4. Checkout Step Two
+        // 4. Checkout Paso 2 (Resumen)
         checkoutStepTwoPage.clickFinish();
 
-        // 5. Checkout Complete
-        Assert.assertEquals(checkoutCompletePage.getCompleteHeaderText(), "Thank you for your order!");
+        // 5. Finalización
+        Assert.assertEquals(checkoutCompletePage.getCompleteHeaderText(), "Thank you for your order!",
+            "El mensaje de confirmación de compra no es el esperado");
     }
 }
