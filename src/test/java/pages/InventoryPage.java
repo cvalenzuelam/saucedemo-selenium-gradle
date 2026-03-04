@@ -33,6 +33,10 @@ public class InventoryPage extends BasePage {
         return getText(cartBadge);
     }
 
+    public boolean isCartBadgePresent() {
+        return isElementPresent(cartBadge);
+    }
+
     public void goToCart() {
         click(cartLink);
     }

@@ -31,6 +31,9 @@ public class LoginPage extends BasePage {
         enterUsername(username);
         enterPassword(password);
         clickLogin();
+        if (username.equals("standard_user")) {
+            waitForUrlContains("inventory.html");
+        }
     }
 
     public String getErrorMessage() {

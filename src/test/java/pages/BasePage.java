@@ -47,10 +47,18 @@ public class BasePage {
 
     public boolean isDisplayed(By locator) {
         try {
-            return findElement(locator).isDisplayed();
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).isDisplayed();
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean isElementPresent(By locator) {
+        return !driver.findElements(locator).isEmpty();
+    }
+
+    public void waitForUrlContains(String partialUrl) {
+        wait.until(ExpectedConditions.urlContains(partialUrl));
     }
 
     public String getCurrentUrl() {
