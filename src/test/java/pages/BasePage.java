@@ -15,13 +15,17 @@ public class BasePage {
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
-        // Aumentamos a 60 segundos para máxima tolerancia en CI/CD
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
     public void navigateTo(String url) {
         driver.get(url);
         waitForPageLoad();
+        hardWait(); // PAUSA FORZADA DE 3 SEGUNDOS
+    }
+
+    public void hardWait() {
+        try { Thread.sleep(3000); } catch (InterruptedException ignored) {}
     }
 
     public void waitForPageLoad() {
@@ -32,7 +36,6 @@ public class BasePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
-    // Método de clic ultra-robusto con reintentos y JS
     public void click(By locator) {
         int attempts = 0;
         while (attempts < 3) {
@@ -43,7 +46,7 @@ public class BasePage {
             } catch (Exception e) {
                 attempts++;
                 if (attempts == 3) throw e;
-                try { Thread.sleep(2000); } catch (InterruptedException ignored) {}
+                hardWait();
             }
         }
     }
@@ -71,6 +74,7 @@ public class BasePage {
 
     public void waitForUrlContains(String partialUrl) {
         wait.until(ExpectedConditions.urlContains(partialUrl));
+        hardWait(); // PAUSA DESPUÉS DE NAVEGAR
     }
 
     public void waitForInvisibility(By locator) {
