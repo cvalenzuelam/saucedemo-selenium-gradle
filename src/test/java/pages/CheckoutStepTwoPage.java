@@ -5,8 +5,8 @@ import org.openqa.selenium.WebDriver;
 
 public class CheckoutStepTwoPage extends BasePage {
 
-    // Selector con data-test exacto
-    private final By finishButton = By.cssSelector("[data-test='finish']");
+    // Locator por ID que es el estándar más seguro en Saucedemo
+    private final By finishButton = By.id("finish");
 
     public CheckoutStepTwoPage(WebDriver driver) {
         super(driver);
@@ -14,7 +14,7 @@ public class CheckoutStepTwoPage extends BasePage {
 
     public void clickFinish() {
         waitForPageLoad();
-        // El botón Finish a veces tarda en cargarse por el resumen del carrito
+        // Usamos el ID directamente
         click(finishButton);
         waitForUrlContains("checkout-complete.html");
     }
