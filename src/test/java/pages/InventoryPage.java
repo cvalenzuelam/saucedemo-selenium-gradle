@@ -26,6 +26,7 @@ public class InventoryPage extends BasePage {
     }
 
     public void addFirstItemToCart() {
+        findElement(inventoryItems); // Esto fuerza la espera del primer item
         click(addToCartButton);
     }
 

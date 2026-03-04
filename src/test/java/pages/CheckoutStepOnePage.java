@@ -32,5 +32,7 @@ public class CheckoutStepOnePage extends BasePage {
 
     public void clickContinue() {
         click(continueButton);
+        // waitForUrlContains("checkout-step-two.html");
+        // No forzamos la URL porque a veces falla y nos quedamos en la misma página con error
     }
 }

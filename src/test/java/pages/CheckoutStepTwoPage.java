@@ -14,5 +14,6 @@ public class CheckoutStepTwoPage extends BasePage {
 
     public void clickFinish() {
         click(finishButton);
+        waitForUrlContains("checkout-complete.html");
     }
 }
