@@ -29,8 +29,9 @@ public class CheckoutTest extends BaseTest {
         CheckoutStepOnePage checkoutStepOnePage = new CheckoutStepOnePage(driver);
         checkoutStepOnePage.fillInformation("", "Perez", "12345");
         checkoutStepOnePage.clickContinue();
-        Assert.assertTrue(checkoutStepOnePage.getErrorMessage().contains("First Name is required"), 
-            "El mensaje de error no apareció o no es el esperado");
+        String actualError = checkoutStepOnePage.getErrorMessage();
+        Assert.assertTrue(actualError.contains("First Name is required"), 
+            "Mensaje esperado no encontrado. Recibido: " + actualError);
     }
 
     @Test(description = "Validar que el formulario requiera el Last Name")
@@ -38,8 +39,9 @@ public class CheckoutTest extends BaseTest {
         CheckoutStepOnePage checkoutStepOnePage = new CheckoutStepOnePage(driver);
         checkoutStepOnePage.fillInformation("Juan", "", "12345");
         checkoutStepOnePage.clickContinue();
-        Assert.assertTrue(checkoutStepOnePage.getErrorMessage().contains("Last Name is required"),
-            "El mensaje de error no apareció o no es el esperado");
+        String actualError = checkoutStepOnePage.getErrorMessage();
+        Assert.assertTrue(actualError.contains("Last Name is required"),
+            "Mensaje esperado no encontrado. Recibido: " + actualError);
     }
 
     @Test(description = "Validar que el formulario requiera el Postal Code")
@@ -47,7 +49,8 @@ public class CheckoutTest extends BaseTest {
         CheckoutStepOnePage checkoutStepOnePage = new CheckoutStepOnePage(driver);
         checkoutStepOnePage.fillInformation("Juan", "Perez", "");
         checkoutStepOnePage.clickContinue();
-        Assert.assertTrue(checkoutStepOnePage.getErrorMessage().contains("Postal Code is required"),
-            "El mensaje de error no apareció o no es el esperado");
+        String actualError = checkoutStepOnePage.getErrorMessage();
+        Assert.assertTrue(actualError.contains("Postal Code is required"),
+            "Mensaje esperado no encontrado. Recibido: " + actualError);
     }
 }

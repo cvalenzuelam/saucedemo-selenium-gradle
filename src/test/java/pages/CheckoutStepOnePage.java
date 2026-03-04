@@ -10,14 +10,16 @@ public class CheckoutStepOnePage extends BasePage {
     private final By lastNameField = By.cssSelector("[data-test='lastName']");
     private final By postalCodeField = By.cssSelector("[data-test='postalCode']");
     private final By continueButton = By.cssSelector("[data-test='continue']");
-    private final By errorMessage = By.cssSelector("[data-test='error']");
+    private final By errorMessageContainer = By.cssSelector("[data-test='error']");
 
     public CheckoutStepOnePage(WebDriver driver) {
         super(driver);
     }
 
     public String getErrorMessage() {
-        return getText(errorMessage);
+        waitForPageLoad();
+        // Obtenemos el texto y lo limpiamos de espacios extra
+        return getText(errorMessageContainer).trim();
     }
 
     public void fillInformation(String firstName, String lastName, String postalCode) {
@@ -28,8 +30,6 @@ public class CheckoutStepOnePage extends BasePage {
     }
 
     public void clickContinue() {
-        jsClick(continueButton);
-        // Esperamos a que la navegación ocurra si los datos son válidos
-        // pero como los tests prueban fallos, no forzamos URL aquí.
+        click(continueButton);
     }
 }
