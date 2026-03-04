@@ -21,50 +21,62 @@ public class BasePage {
     public void navigateTo(String url) {
         driver.get(url);
         waitForPageLoad();
-        hardWait(); 
+        hardWait(2000); 
     }
 
-    public void hardWait() {
-        // Aumentado a 5 segundos para máxima sincronización
-        try { Thread.sleep(5000); } catch (InterruptedException ignored) {}
+    public void hardWait(int ms) {
+        try { Thread.sleep(ms); } catch (InterruptedException ignored) {}
     }
 
     public void waitForPageLoad() {
         wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
     }
 
+    protected void scrollToElement(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+    }
+
     protected WebElement findElement(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        scrollToElement(element);
+        return element;
     }
 
     public void click(By locator) {
         int attempts = 0;
         while (attempts < 3) {
             try {
-                wait.until(ExpectedConditions.elementToBeClickable(locator));
+                WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                scrollToElement(element);
+                wait.until(ExpectedConditions.elementToBeClickable(element));
                 jsClick(locator);
-                hardWait(); // Pausa después de cada clic para que el DOM se asiente
+                hardWait(2000); 
                 return;
             } catch (Exception e) {
                 attempts++;
                 if (attempts == 3) throw e;
-                hardWait();
+                hardWait(2000);
             }
         }
     }
 
     protected void jsClick(By locator) {
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        WebElement element = driver.findElement(locator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 
     public void type(By locator, String text) {
         WebElement element = findElement(locator);
         element.clear();
-        try { Thread.sleep(500); } catch (InterruptedException ignored) {} // Mini pausa tras clear
         if (text != null && !text.isEmpty()) {
             element.sendKeys(text);
+            // Verificación de seguridad: si el texto no se escribió, reintentamos
+            if (!element.getAttribute("value").equals(text)) {
+                element.clear();
+                element.sendKeys(text);
+            }
         }
+        hardWait(500);
     }
 
     public String getText(By locator) {
@@ -72,12 +84,16 @@ public class BasePage {
     }
 
     public boolean isElementPresent(By locator) {
-        return !driver.findElements(locator).isEmpty();
+        try {
+            return !driver.findElements(locator).isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void waitForUrlContains(String partialUrl) {
         wait.until(ExpectedConditions.urlContains(partialUrl));
-        hardWait(); 
+        hardWait(2000); 
     }
 
     public void waitForInvisibility(By locator) {

@@ -20,17 +20,17 @@ public class BaseTest {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
         
-        options.addArguments("--disable-extensions");
-        options.addArguments("--proxy-server='direct://'");
-        options.addArguments("--proxy-bypass-list=*");
-        options.addArguments("--start-maximized");
+        // Optimización de rendimiento para GitHub Actions
+        options.addArguments("--disable-notifications");
+        options.addArguments("--disable-infobars");
+        options.addArguments("--disable-browser-side-navigation");
+        options.addArguments("--disable-features=VizDisplayCompositor");
 
         driver = new ChromeDriver(options);
         
-        // ESPERAS GLOBALES AÚN MÁS LARGAS (45s)
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(45));
+        // TIEMPOS DE ESPERA ROBUSTOS
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
     }
 
     @AfterMethod(alwaysRun = true)
