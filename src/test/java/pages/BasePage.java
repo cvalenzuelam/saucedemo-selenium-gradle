@@ -21,11 +21,12 @@ public class BasePage {
     public void navigateTo(String url) {
         driver.get(url);
         waitForPageLoad();
-        hardWait(); // PAUSA FORZADA DE 3 SEGUNDOS
+        hardWait(); 
     }
 
     public void hardWait() {
-        try { Thread.sleep(3000); } catch (InterruptedException ignored) {}
+        // Aumentado a 5 segundos para máxima sincronización
+        try { Thread.sleep(5000); } catch (InterruptedException ignored) {}
     }
 
     public void waitForPageLoad() {
@@ -42,6 +43,7 @@ public class BasePage {
             try {
                 wait.until(ExpectedConditions.elementToBeClickable(locator));
                 jsClick(locator);
+                hardWait(); // Pausa después de cada clic para que el DOM se asiente
                 return;
             } catch (Exception e) {
                 attempts++;
@@ -59,6 +61,7 @@ public class BasePage {
     public void type(By locator, String text) {
         WebElement element = findElement(locator);
         element.clear();
+        try { Thread.sleep(500); } catch (InterruptedException ignored) {} // Mini pausa tras clear
         if (text != null && !text.isEmpty()) {
             element.sendKeys(text);
         }
@@ -74,7 +77,7 @@ public class BasePage {
 
     public void waitForUrlContains(String partialUrl) {
         wait.until(ExpectedConditions.urlContains(partialUrl));
-        hardWait(); // PAUSA DESPUÉS DE NAVEGAR
+        hardWait(); 
     }
 
     public void waitForInvisibility(By locator) {

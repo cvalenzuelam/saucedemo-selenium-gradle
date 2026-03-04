@@ -20,7 +20,6 @@ public class BaseTest {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
         
-        // Flags de estabilidad máxima
         options.addArguments("--disable-extensions");
         options.addArguments("--proxy-server='direct://'");
         options.addArguments("--proxy-bypass-list=*");
@@ -28,8 +27,8 @@ public class BaseTest {
 
         driver = new ChromeDriver(options);
         
-        // ESPERAS GLOBALES LARGAS
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        // ESPERAS GLOBALES AÚN MÁS LARGAS (45s)
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(45));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
     }
