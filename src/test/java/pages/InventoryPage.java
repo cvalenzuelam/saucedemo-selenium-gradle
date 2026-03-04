@@ -3,6 +3,8 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,9 +15,9 @@ public class InventoryPage extends BasePage {
     private final By cartBadge = By.className("shopping_cart_badge");
     private final By cartLink = By.className("shopping_cart_link");
     private final By inventoryItems = By.className("inventory_item");
-    private final By addToCartButton = By.cssSelector(".btn_inventory");
     private final By sortDropdown = By.className("product_sort_container");
     private final By inventoryItemPrices = By.className("inventory_item_price");
+    private final By addToCartButton = By.xpath("//button[text()='Add to cart']");
 
     public InventoryPage(WebDriver driver) {
         super(driver);
@@ -26,11 +28,12 @@ public class InventoryPage extends BasePage {
     }
 
     public void addFirstItemToCart() {
-        findElement(inventoryItems); // Esto fuerza la espera del primer item
-        click(addToCartButton);
+        waitForPageLoad();
+        jsClick(addToCartButton);
     }
 
     public String getCartItemCount() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
         return getText(cartBadge);
     }
 
@@ -65,6 +68,6 @@ public class InventoryPage extends BasePage {
     }
 
     public void removeFirstItemFromCart() {
-        click(By.cssSelector(".btn_secondary.btn_inventory"));
+        jsClick(By.xpath("//button[text()='Remove']"));
     }
 }

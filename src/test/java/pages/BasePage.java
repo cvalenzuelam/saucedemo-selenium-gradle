@@ -29,6 +29,15 @@ public class BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
 
+    protected void jsClick(By locator) {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+
+    public void waitForPageLoad() {
+        wait.until(d -> ((org.openqa.selenium.JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+    }
+
     public void type(By locator, String text) {
         WebElement element = findElement(locator);
         element.clear();
