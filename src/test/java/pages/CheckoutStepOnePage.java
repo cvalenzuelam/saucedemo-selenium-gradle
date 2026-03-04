@@ -5,19 +5,15 @@ import org.openqa.selenium.WebDriver;
 
 public class CheckoutStepOnePage extends BasePage {
 
-    // Locators
-    private final By firstNameField = By.id("first-name");
-    private final By lastNameField = By.id("last-name");
-    private final By postalCodeField = By.id("postal-code");
-    private final By continueButton = By.id("continue");
-
+    // Locators robustos con data-test
+    private final By firstNameField = By.cssSelector("[data-test='firstName']");
+    private final By lastNameField = By.cssSelector("[data-test='lastName']");
+    private final By postalCodeField = By.cssSelector("[data-test='postalCode']");
+    private final By continueButton = By.cssSelector("[data-test='continue']");
     private final By errorMessage = By.cssSelector("[data-test='error']");
 
     public CheckoutStepOnePage(WebDriver driver) {
         super(driver);
-        // waitForUrlContains("checkout-step-one.html"); 
-        // Comentado para no forzarlo si se usa antes de navegar, 
-        // pero lo haremos en los tests de forma manual para mayor claridad.
     }
 
     public String getErrorMessage() {
@@ -25,14 +21,15 @@ public class CheckoutStepOnePage extends BasePage {
     }
 
     public void fillInformation(String firstName, String lastName, String postalCode) {
+        waitForPageLoad();
         type(firstNameField, firstName);
         type(lastNameField, lastName);
         type(postalCodeField, postalCode);
     }
 
     public void clickContinue() {
-        click(continueButton);
-        // waitForUrlContains("checkout-step-two.html");
-        // No forzamos la URL porque a veces falla y nos quedamos en la misma página con error
+        jsClick(continueButton);
+        // Esperamos a que la navegación ocurra si los datos son válidos
+        // pero como los tests prueban fallos, no forzamos URL aquí.
     }
 }

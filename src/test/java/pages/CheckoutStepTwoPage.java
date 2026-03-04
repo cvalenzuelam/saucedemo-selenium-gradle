@@ -5,15 +5,16 @@ import org.openqa.selenium.WebDriver;
 
 public class CheckoutStepTwoPage extends BasePage {
 
-    // Locators
-    private final By finishButton = By.id("finish");
+    // Locator robusto
+    private final By finishButton = By.cssSelector("[data-test='finish']");
 
     public CheckoutStepTwoPage(WebDriver driver) {
         super(driver);
     }
 
     public void clickFinish() {
-        click(finishButton);
+        waitForPageLoad();
+        jsClick(finishButton);
         waitForUrlContains("checkout-complete.html");
     }
 }
