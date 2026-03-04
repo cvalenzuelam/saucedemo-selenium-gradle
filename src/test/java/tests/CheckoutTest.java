@@ -12,11 +12,9 @@ public class CheckoutTest extends BaseTest {
         LoginPage loginPage = new LoginPage(driver);
         InventoryPage inventoryPage = new InventoryPage(driver);
         
-        // Login robusto
         loginPage.navigateTo("https://www.saucedemo.com/");
         loginPage.login("standard_user", "secret_sauce");
         
-        // Agregar al carrito y navegar al checkout
         inventoryPage.addFirstItemToCart();
         inventoryPage.goToCart();
         
@@ -29,9 +27,9 @@ public class CheckoutTest extends BaseTest {
         CheckoutStepOnePage checkoutStepOnePage = new CheckoutStepOnePage(driver);
         checkoutStepOnePage.fillInformation("", "Perez", "12345");
         checkoutStepOnePage.clickContinue();
-        String actualError = checkoutStepOnePage.getErrorMessage();
-        Assert.assertTrue(actualError.contains("First Name is required"), 
-            "Mensaje esperado no encontrado. Recibido: " + actualError);
+        String actualError = checkoutStepOnePage.getErrorMessage().toLowerCase();
+        Assert.assertTrue(actualError.contains("first name is required"), 
+            "Error esperado: first name is required. Recibido: " + actualError);
     }
 
     @Test(description = "Validar que el formulario requiera el Last Name")
@@ -39,9 +37,9 @@ public class CheckoutTest extends BaseTest {
         CheckoutStepOnePage checkoutStepOnePage = new CheckoutStepOnePage(driver);
         checkoutStepOnePage.fillInformation("Juan", "", "12345");
         checkoutStepOnePage.clickContinue();
-        String actualError = checkoutStepOnePage.getErrorMessage();
-        Assert.assertTrue(actualError.contains("Last Name is required"),
-            "Mensaje esperado no encontrado. Recibido: " + actualError);
+        String actualError = checkoutStepOnePage.getErrorMessage().toLowerCase();
+        Assert.assertTrue(actualError.contains("last name is required"),
+            "Error esperado: last name is required. Recibido: " + actualError);
     }
 
     @Test(description = "Validar que el formulario requiera el Postal Code")
@@ -49,8 +47,8 @@ public class CheckoutTest extends BaseTest {
         CheckoutStepOnePage checkoutStepOnePage = new CheckoutStepOnePage(driver);
         checkoutStepOnePage.fillInformation("Juan", "Perez", "");
         checkoutStepOnePage.clickContinue();
-        String actualError = checkoutStepOnePage.getErrorMessage();
-        Assert.assertTrue(actualError.contains("Postal Code is required"),
-            "Mensaje esperado no encontrado. Recibido: " + actualError);
+        String actualError = checkoutStepOnePage.getErrorMessage().toLowerCase();
+        Assert.assertTrue(actualError.contains("postal code is required"),
+            "Error esperado: postal code is required. Recibido: " + actualError);
     }
 }

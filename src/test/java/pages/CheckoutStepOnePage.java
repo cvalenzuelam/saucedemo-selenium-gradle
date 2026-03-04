@@ -18,8 +18,11 @@ public class CheckoutStepOnePage extends BasePage {
 
     public String getErrorMessage() {
         waitForPageLoad();
-        // Obtenemos el texto y lo limpiamos de espacios extra
-        return getText(errorMessageContainer).trim();
+        WebElement errorElement = wait.until(d -> {
+            WebElement e = d.findElement(errorMessageContainer);
+            return (!e.getText().trim().isEmpty()) ? e : null;
+        });
+        return errorElement.getText().trim();
     }
 
     public void fillInformation(String firstName, String lastName, String postalCode) {
