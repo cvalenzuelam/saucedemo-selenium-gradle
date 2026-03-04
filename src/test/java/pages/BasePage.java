@@ -70,6 +70,10 @@ public class BasePage {
         wait.until(ExpectedConditions.urlContains(partialUrl));
     }
 
+    public void waitForInvisibility(By locator) {
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }

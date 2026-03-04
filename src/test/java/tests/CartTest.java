@@ -26,6 +26,7 @@ public class CartTest extends BaseTest {
         Assert.assertEquals(inventoryPage.getCartItemCount(), "1");
         
         inventoryPage.removeFirstItemFromCart();
+        inventoryPage.waitForCartBadgeToDisappear();
         Assert.assertFalse(inventoryPage.isCartBadgePresent(), "El badge del carrito no debería existir si está vacío");
     }
 }

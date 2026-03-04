@@ -17,7 +17,10 @@ public class InventoryPage extends BasePage {
     private final By inventoryItems = By.className("inventory_item");
     private final By sortDropdown = By.className("product_sort_container");
     private final By inventoryItemPrices = By.className("inventory_item_price");
-    private final By addToCartButton = By.xpath("//button[text()='Add to cart']");
+    
+    // Locators más robustos usando data-test que es el estándar recomendado para Saucedemo
+    private final By firstAddToCartBtn = By.cssSelector("[data-test^='add-to-cart']");
+    private final By firstRemoveBtn = By.cssSelector("[data-test^='remove']");
 
     public InventoryPage(WebDriver driver) {
         super(driver);
@@ -29,7 +32,9 @@ public class InventoryPage extends BasePage {
 
     public void addFirstItemToCart() {
         waitForPageLoad();
-        jsClick(addToCartButton);
+        // Esperamos a que el botón sea visible y clickeable
+        wait.until(ExpectedConditions.elementToBeClickable(firstAddToCartBtn));
+        jsClick(firstAddToCartBtn);
     }
 
     public String getCartItemCount() {
@@ -39,6 +44,10 @@ public class InventoryPage extends BasePage {
 
     public boolean isCartBadgePresent() {
         return isElementPresent(cartBadge);
+    }
+
+    public void waitForCartBadgeToDisappear() {
+        waitForInvisibility(cartBadge);
     }
 
     public void goToCart() {
@@ -68,6 +77,6 @@ public class InventoryPage extends BasePage {
     }
 
     public void removeFirstItemFromCart() {
-        jsClick(By.xpath("//button[text()='Remove']"));
+        jsClick(firstRemoveBtn);
     }
 }
