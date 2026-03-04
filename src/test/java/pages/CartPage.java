@@ -14,5 +14,6 @@ public class CartPage extends BasePage {
 
     public void clickCheckout() {
         click(checkoutButton);
+        waitForUrlContains("checkout-step-one.html");
     }
 }

@@ -15,6 +15,9 @@ public class CheckoutStepOnePage extends BasePage {
 
     public CheckoutStepOnePage(WebDriver driver) {
         super(driver);
+        // waitForUrlContains("checkout-step-one.html"); 
+        // Comentado para no forzarlo si se usa antes de navegar, 
+        // pero lo haremos en los tests de forma manual para mayor claridad.
     }
 
     public String getErrorMessage() {

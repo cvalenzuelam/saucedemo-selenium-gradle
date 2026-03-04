@@ -39,6 +39,7 @@ public class InventoryPage extends BasePage {
 
     public void goToCart() {
         click(cartLink);
+        waitForUrlContains("cart.html");
     }
 
     public int getInventoryItemCount() {
