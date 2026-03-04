@@ -26,4 +26,13 @@ jobs:
       run: chmod +x gradlew
 
     - name: Run Tests
-      run: ./gradlew test
+      # We add --continue to try running all tests even if some fail, 
+      # so we can see all the results in the report.
+      run: ./gradlew test --continue
+
+    - name: Upload Test Report
+      if: always() # This ensures the report is uploaded even if the tests fail
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report
+        path: build/reports/tests/test/
