@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.saucedemo'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Selenium Java
+    implementation 'org.seleniumhq.selenium:selenium-java:4.28.1'
+    
+    // TestNG
+    testImplementation 'org.testng:testng:7.10.2'
+    
+    // WebDriver Manager (opcional pero recomendado, aunque Selenium 4 ya lo gestiona)
+    // implementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
+}
+
+test {
+    useTestNG() {
+        suites 'src/test/resources/suites/testng.xml'
+    }
+}
