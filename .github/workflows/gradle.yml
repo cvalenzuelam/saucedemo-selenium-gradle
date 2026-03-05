@@ -26,8 +26,8 @@ jobs:
       run: chmod +x gradlew
 
     - name: Run Tests
-      # Agregamos --info para ver los fallos detallados en la consola de GitHub
-      run: ./gradlew test --continue --info
+      # Usamos clean test para asegurar un entorno fresco, igual que en la prueba local exitosa
+      run: ./gradlew clean test --info
 
     - name: Upload Test Report
       if: always() # This ensures the report is uploaded even if the tests fail
