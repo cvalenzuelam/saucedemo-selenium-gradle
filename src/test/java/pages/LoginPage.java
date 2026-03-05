@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 
 public class LoginPage extends BasePage {
 
-    // Locators
     private final By usernameField = By.id("user-name");
     private final By passwordField = By.id("password");
     private final By loginButton = By.id("login-button");
@@ -15,25 +14,13 @@ public class LoginPage extends BasePage {
         super(driver);
     }
 
-    public void enterUsername(String username) {
-        type(usernameField, username);
-    }
-
-    public void enterPassword(String password) {
-        type(passwordField, password);
-    }
-
-    public void clickLogin() {
-        click(loginButton);
-    }
-
     public void login(String username, String password) {
-        enterUsername(username);
-        enterPassword(password);
-        clickLogin();
+        type(usernameField, username);
+        type(passwordField, password);
+        click(loginButton);
+        // Sincronización crítica: No seguir hasta que estemos dentro
         if (username.equals("standard_user")) {
-            waitForUrlContains("inventory.html");
-            waitForPageLoad();
+            findElement(By.className("title")); 
         }
     }
 
