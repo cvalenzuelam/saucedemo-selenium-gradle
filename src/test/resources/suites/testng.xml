@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="SauceDemo Suite">
-    <test name="E2E Validation">
+    <test name="Regression Tests">
         <classes>
+            <class name="tests.LoginTest"/>
             <class name="tests.EndToEndTest"/>
         </classes>
     </test>
