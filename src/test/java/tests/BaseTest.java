@@ -1,20 +1,24 @@
 package tests;
 
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import java.time.Duration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BaseTest {
     protected WebDriver driver;
 
     @BeforeMethod
     public void setUp() {
+        // Silenciamos los logs de Selenium y CDP que ensucian el CI
+        System.setProperty("webdriver.chrome.silentOutput", "true");
+        Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
+
         ChromeOptions options = new ChromeOptions();
-        // Usamos el modo headless tradicional que es más ligero para CI
         options.addArguments("--headless"); 
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
@@ -22,9 +26,8 @@ public class BaseTest {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
         
-        // Flags de estabilidad para contenedores
-        options.addArguments("--disable-software-rasterizer");
-        options.addArguments("--disable-extensions");
+        // Evita el error de CDP silenciando las notificaciones de logs del navegador
+        options.setCapability("goog:loggingPrefs", java.util.Map.of("browser", "OFF", "driver", "OFF"));
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));

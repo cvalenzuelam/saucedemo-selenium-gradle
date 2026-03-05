@@ -9,15 +9,14 @@ import java.util.stream.Collectors;
 
 public class InventoryPage extends BasePage {
 
-    // Locators
     private final By title = By.className("title");
     private final By cartBadge = By.className("shopping_cart_badge");
-    private final By cartLink = By.className("shopping_cart_link");
+    // Selector oficial data-test para el link del carrito
+    private final By cartLink = By.cssSelector("[data-test='shopping-cart-link']");
     private final By inventoryItems = By.className("inventory_item");
     private final By sortDropdown = By.className("product_sort_container");
     private final By inventoryItemPrices = By.className("inventory_item_price");
     
-    // Locators de acción
     private final By firstAddToCartBtn = By.cssSelector("[id^='add-to-cart']");
     private final By firstRemoveBtn = By.cssSelector("[id^='remove']");
 
@@ -47,7 +46,9 @@ public class InventoryPage extends BasePage {
     }
 
     public void goToCart() {
-        click(cartLink);
+        // En CI/CD el clic normal en el icono a veces es ignorado por el renderizado
+        // Forzamos el clic vía JavaScript para asegurar la transición
+        jsClick(cartLink);
         waitForUrlContains("cart.html");
     }
 
