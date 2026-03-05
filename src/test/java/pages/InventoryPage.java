@@ -3,13 +3,13 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class InventoryPage extends BasePage {
 
-    // Locators estandarizados con data-test e IDs
     private final By title = By.cssSelector("[data-test='title']");
     private final By cartBadge = By.cssSelector("[data-test='shopping-cart-badge']");
     private final By cartLink = By.cssSelector("[data-test='shopping-cart-link']");
@@ -31,6 +31,11 @@ public class InventoryPage extends BasePage {
     public void addFirstItemToCart() {
         waitForPageLoad();
         click(firstAddToCartBtn);
+        // Sincronización para CI: Esperamos a que el botón se convierta en 'Remove'
+        // Esto confirma que Saucedemo ya registró el cambio en el estado.
+        wait.until(ExpectedConditions.visibilityOfElementLocated(firstRemoveBtn));
+        // Esperamos que el contador del carrito aparezca/se actualice
+        wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
     }
 
     public String getCartItemCount() {
@@ -42,9 +47,10 @@ public class InventoryPage extends BasePage {
     }
 
     public void goToCart() {
-        // En CI/CD el clic en el icono a veces es caprichoso
         click(cartLink);
+        // Al llegar al carrito, esperamos ver el título para confirmar navegación
         waitForUrlContains("cart.html");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test='title']")));
     }
 
     public int getInventoryItemCount() {
@@ -65,11 +71,12 @@ public class InventoryPage extends BasePage {
 
     public void clickProductByName(String name) {
         waitForPageLoad();
-        // XPath sigue siendo útil para buscar por texto exacto
         click(By.xpath("//div[@data-test='inventory-item-name' and text()='" + name + "']"));
     }
 
     public void removeFirstItemFromCart() {
         click(firstRemoveBtn);
+        // Esperamos a que el botón vuelva a ser 'Add to cart'
+        wait.until(ExpectedConditions.visibilityOfElementLocated(firstAddToCartBtn));
     }
 }

@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
 
@@ -20,7 +21,8 @@ public class LoginPage extends BasePage {
         click(loginButton);
         // Sincronización crítica: No seguir hasta que estemos dentro
         if (username.equals("standard_user")) {
-            findElement(By.className("title")); 
+            // Esperamos explícitamente a que el título de la siguiente página sea visible
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("title")));
         }
     }
 

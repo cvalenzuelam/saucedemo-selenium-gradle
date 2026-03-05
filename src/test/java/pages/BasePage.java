@@ -29,24 +29,30 @@ public class BasePage {
     }
 
     public void click(By locator) {
-        // Esperamos a que sea visible y luego clickeable
+        // En CI, el scroll es vital para que el elemento sea interactuable
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
         try {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
             element.click();
         } catch (Exception e) {
-            // Si el clic normal falla (típico en Headless), usamos JS
+            // Fallback robusto con JS si el clic nativo falla en Headless
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         }
     }
 
     public void type(By locator, String text) {
         WebElement element = findElement(locator);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
         element.clear();
         if (text != null && !text.isEmpty()) {
             element.sendKeys(text);
-            // Verificación crítica: ¿Realmente se escribió?
-            if (!element.getAttribute("value").equals(text)) {
-                ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + text + "';", element);
+            
+            // Verificación para React/Vue: Si el sendKeys es muy rápido para el CI, forzamos el valor
+            String currentValue = element.getAttribute("value");
+            if (!text.equals(currentValue)) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].value = arguments[1];", element, text);
+                // Disparamos evento 'input' para que React sepa que el valor cambió
+                ((JavascriptExecutor) driver).executeScript("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element);
             }
         }
     }
