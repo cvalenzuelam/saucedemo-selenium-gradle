@@ -20,25 +20,29 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Install Chrome and ChromeDriver
+      - name: Install Chrome and ChromeDriver (matching versions)
         run: |
           # Install Chrome
           wget -q -O /tmp/google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt-get update
           sudo apt-get install -y /tmp/google-chrome-stable.deb
           
-          # Get Chrome version
+          # Get Chrome major version
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
           echo "Chrome version: $CHROME_VERSION"
           
-          # Download matching ChromeDriver
-          wget -q -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}/chromedriver_linux64.zip"
+          # Download matching ChromeDriver from chromedriver.storage.googleapis.com
+          CD_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}")
+          echo "ChromeDriver version: $CD_VERSION"
+          
+          wget -q -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${CD_VERSION}/chromedriver_linux64.zip"
           unzip -q /tmp/chromedriver.zip -d /tmp/
           sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
           
-          # Verify
+          # Verify versions match
           chromedriver --version
+          google-chrome --version
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
