@@ -46,9 +46,7 @@ public class InventoryPage extends BasePage {
     }
 
     public void goToCart() {
-        // En CI/CD el clic normal en el icono a veces es ignorado por el renderizado
-        // Forzamos el clic vía JavaScript para asegurar la transición
-        jsClick(cartLink);
+        click(cartLink);
         waitForUrlContains("cart.html");
     }
 
