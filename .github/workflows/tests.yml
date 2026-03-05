@@ -29,7 +29,11 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run tests
-        run: ./gradlew test
+        env:
+          SE_EVENT_BUS_HOST: localhost
+          SE_EVENT_BUS_PUBLISH_PORT: 4442
+          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+        run: ./gradlew test --no-daemon
 
       - name: Upload test reports
         if: always()
