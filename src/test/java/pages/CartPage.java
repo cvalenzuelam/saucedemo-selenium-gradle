@@ -13,7 +13,5 @@ public class CartPage extends BasePage {
 
     public void clickCheckout() {
         click(checkoutButton);
-        // Sincronización crítica: No seguir hasta que la URL cambie
-        waitForUrlContains("checkout-step-one.html");
     }
 }

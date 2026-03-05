@@ -2,23 +2,13 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class InventoryPage extends BasePage {
 
-    private final By title = By.cssSelector("[data-test='title']");
-    private final By cartBadge = By.cssSelector("[data-test='shopping-cart-badge']");
-    private final By cartLink = By.cssSelector("[data-test='shopping-cart-link']");
-    private final By inventoryItems = By.cssSelector("[data-test='inventory-item']");
-    private final By sortDropdown = By.cssSelector("[data-test='product-sort-container']");
-    private final By inventoryItemPrices = By.cssSelector("[data-test='inventory-item-price']");
-    
-    private final By firstAddToCartBtn = By.cssSelector("[id^='add-to-cart']");
-    private final By firstRemoveBtn = By.cssSelector("[id^='remove']");
+    private final By title = By.cssSelector(".title");
+    private final By shoppingCartIcon = By.className("shopping_cart_link");
+    private final By addBackpackToCartButton = By.id("add-to-cart-sauce-labs-backpack");
+    private final By addBikeLightToCartButton = By.id("add-to-cart-sauce-labs-bike-light");
 
     public InventoryPage(WebDriver driver) {
         super(driver);
@@ -28,55 +18,15 @@ public class InventoryPage extends BasePage {
         return getText(title);
     }
 
-    public void addFirstItemToCart() {
-        waitForPageLoad();
-        click(firstAddToCartBtn);
-        // Sincronización para CI: Esperamos a que el botón se convierta en 'Remove'
-        // Esto confirma que Saucedemo ya registró el cambio en el estado.
-        wait.until(ExpectedConditions.visibilityOfElementLocated(firstRemoveBtn));
-        // Esperamos que el contador del carrito aparezca/se actualice
-        wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
+    public void addBackpackToCart() {
+        click(addBackpackToCartButton);
     }
 
-    public String getCartItemCount() {
-        return getText(cartBadge);
-    }
-
-    public boolean isCartBadgePresent() {
-        return isElementPresent(cartBadge);
+    public void addBikeLightToCart() {
+        click(addBikeLightToCartButton);
     }
 
     public void goToCart() {
-        click(cartLink);
-        // Al llegar al carrito, esperamos ver el título para confirmar navegación
-        waitForUrlContains("cart.html");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test='title']")));
-    }
-
-    public int getInventoryItemCount() {
-        return driver.findElements(inventoryItems).size();
-    }
-
-    public void selectSortOption(String value) {
-        waitForPageLoad();
-        Select select = new Select(findElement(sortDropdown));
-        select.selectByValue(value);
-    }
-
-    public List<Double> getProductPrices() {
-        return driver.findElements(inventoryItemPrices).stream()
-                .map(e -> Double.parseDouble(e.getText().replace("$", "")))
-                .collect(Collectors.toList());
-    }
-
-    public void clickProductByName(String name) {
-        waitForPageLoad();
-        click(By.xpath("//div[@data-test='inventory-item-name' and text()='" + name + "']"));
-    }
-
-    public void removeFirstItemFromCart() {
-        click(firstRemoveBtn);
-        // Esperamos a que el botón vuelva a ser 'Add to cart'
-        wait.until(ExpectedConditions.visibilityOfElementLocated(firstAddToCartBtn));
+        click(shoppingCartIcon);
     }
 }

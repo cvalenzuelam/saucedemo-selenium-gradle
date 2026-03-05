@@ -5,14 +5,13 @@ import org.openqa.selenium.WebDriver;
 
 public class CheckoutCompletePage extends BasePage {
 
-    // Locator robusto
-    private final By completeHeader = By.cssSelector("[data-test='complete-header']");
+    private final By completeHeader = By.className("complete-header");
 
     public CheckoutCompletePage(WebDriver driver) {
         super(driver);
     }
 
-    public String getCompleteHeaderText() {
+    public String getCompleteMessage() {
         return getText(completeHeader);
     }
 }
