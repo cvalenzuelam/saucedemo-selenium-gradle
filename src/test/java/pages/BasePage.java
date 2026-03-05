@@ -59,6 +59,14 @@ public class BasePage {
         return findElement(locator).getText().trim();
     }
 
+    public boolean isElementPresent(By locator) {
+        try {
+            return !driver.findElements(locator).isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void waitForUrlContains(String partialUrl) {
         wait.until(ExpectedConditions.urlContains(partialUrl));
     }
