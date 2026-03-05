@@ -10,6 +10,10 @@ public class InventoryPage extends BasePage {
     private final By addBackpackToCartButton = By.id("add-to-cart-sauce-labs-backpack");
     private final By addBikeLightToCartButton = By.id("add-to-cart-sauce-labs-bike-light");
 
+    private final By shoppingCartBadge = By.className("shopping_cart_badge");
+    private final By removeBackpackButton = By.id("remove-sauce-labs-backpack");
+    private final By firstItemName = By.cssSelector(".inventory_item_name");
+
     public InventoryPage(WebDriver driver) {
         super(driver);
     }
@@ -20,6 +24,22 @@ public class InventoryPage extends BasePage {
 
     public void addBackpackToCart() {
         click(addBackpackToCartButton);
+    }
+
+    public void removeBackpackFromCart() {
+        click(removeBackpackButton);
+    }
+
+    public String getCartBadgeCount() {
+        return getText(shoppingCartBadge);
+    }
+
+    public boolean isCartBadgePresent() {
+        return driver.findElements(shoppingCartBadge).size() > 0;
+    }
+
+    public String getFirstItemName() {
+        return getText(firstItemName);
     }
 
     public void addBikeLightToCart() {
