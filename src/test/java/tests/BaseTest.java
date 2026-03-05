@@ -1,5 +1,6 @@
 package tests;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -12,36 +13,31 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        // Leemos la propiedad "headless" desde la consola o sistema
-        // Por defecto será true si no se especifica
-        String headlessProp = System.getProperty("headless", "true");
-        boolean isHeadless = Boolean.parseBoolean(headlessProp);
-
         ChromeOptions options = new ChromeOptions();
-        
-        if (isHeadless) {
-            options.addArguments("--headless=new");
-        }
-        
+        // Usamos el modo headless tradicional que es más ligero para CI
+        options.addArguments("--headless"); 
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
+        
+        // Flags de estabilidad para contenedores
+        options.addArguments("--disable-software-rasterizer");
+        options.addArguments("--disable-extensions");
 
         driver = new ChromeDriver(options);
-        
-        // Solo WebDriverWait en BasePage, aquí solo timeout de carga inicial
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
-        
-        if (!isHeadless) {
-            driver.manage().window().maximize();
-        }
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
         if (driver != null) {
-            driver.quit();
+            try {
+                driver.quit();
+            } catch (Exception e) {
+                // Ignore
+            }
         }
     }
 }

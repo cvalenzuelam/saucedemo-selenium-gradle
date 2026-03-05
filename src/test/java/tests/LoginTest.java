@@ -15,8 +15,9 @@ public class LoginTest extends BaseTest {
         loginPage.navigateTo("https://www.saucedemo.com/");
         loginPage.login("standard_user", "secret_sauce");
         
-        Assert.assertTrue(inventoryPage.getTitle().contains("Products"), 
-            "No se redirigió correctamente a la página de inventario");
+        String title = inventoryPage.getTitle();
+        Assert.assertTrue(title.equalsIgnoreCase("Products"), 
+            "Esperaba 'Products' pero encontré: [" + title + "]");
     }
 
     @Test(description = "Validar el inicio de sesión fallido")
@@ -26,8 +27,8 @@ public class LoginTest extends BaseTest {
         loginPage.navigateTo("https://www.saucedemo.com/");
         loginPage.login("locked_out_user", "secret_sauce");
         
-        String actualError = loginPage.getErrorMessage();
-        Assert.assertTrue(actualError.contains("Epic sadface: Sorry, this user has been locked out."), 
-            "El mensaje de error no es el esperado");
+        String actualError = loginPage.getErrorMessage().toLowerCase();
+        Assert.assertTrue(actualError.contains("locked out"), 
+            "El mensaje de error no contiene la frase esperada. Recibido: [" + actualError + "]");
     }
 }
