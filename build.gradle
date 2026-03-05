@@ -15,13 +15,21 @@ dependencies {
     
     // TestNG
     testImplementation 'org.testng:testng:7.10.2'
-    
-    // WebDriver Manager (opcional pero recomendado, aunque Selenium 4 ya lo gestiona)
-    // implementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
 }
 
 test {
     useTestNG() {
         suites 'src/test/resources/suites/testng.xml'
+        // Desactivamos cualquier paralelismo que pueda estar rompiendo el CI
+        parallel = 'none'
+    }
+    
+    // Forzamos que los tests siempre se ejecuten, incluso si no han cambiado
+    outputs.upToDateWhen { false }
+    
+    // Queremos ver los resultados en la consola de GitHub Actions
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        exceptionFormat "full"
     }
 }

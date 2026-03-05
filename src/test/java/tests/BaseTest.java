@@ -20,23 +20,27 @@ public class BaseTest {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
         
-        // Optimización de rendimiento para GitHub Actions
-        options.addArguments("--disable-notifications");
+        // Optimizaciones clave para CI
+        options.addArguments("--disable-extensions");
         options.addArguments("--disable-infobars");
-        options.addArguments("--disable-browser-side-navigation");
-        options.addArguments("--disable-features=VizDisplayCompositor");
+        options.addArguments("--no-first-run");
+        options.addArguments("--no-default-browser-check");
 
         driver = new ChromeDriver(options);
         
-        // TIEMPOS DE ESPERA ROBUSTOS
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+        // Configuración de timeouts de Selenium
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
         if (driver != null) {
-            driver.quit();
+            try {
+                driver.quit();
+            } catch (Exception e) {
+                // Si falla al cerrar, no queremos que rompa el reporte
+            }
         }
     }
 }
