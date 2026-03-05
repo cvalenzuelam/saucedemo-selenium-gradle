@@ -11,23 +11,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
         distribution: 'temurin'
+        cache: 'gradle'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    - name: Grant execute permission and Fix line endings
+      run: |
+        sed -i 's/\r$//' gradlew
+        chmod +x gradlew
 
     - name: Run Tests
-      # Selenium 4 gestionará el driver automáticamente en Ubuntu
-      run: ./gradlew clean test --info
+      # Usamos --no-daemon para evitar que el daemon muera o consuma memoria extra
+      run: ./gradlew clean test --info --no-daemon -Djava.awt.headless=true
 
     - name: Upload Test Report
       if: always()

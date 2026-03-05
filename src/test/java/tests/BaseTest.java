@@ -28,9 +28,8 @@ public class BaseTest {
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
         
-        // Desactivamos telemetría y extensiones para velocidad en CI
+        // Desactivamos extensiones para velocidad en CI
         options.addArguments("--disable-extensions");
-        options.addArguments("--disable-features=VizDisplayCompositor");
         
         options.setCapability("goog:loggingPrefs", java.util.Map.of("browser", "OFF", "driver", "OFF"));
 
