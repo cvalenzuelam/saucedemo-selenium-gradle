@@ -20,19 +20,32 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Install Google Chrome
-        uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
+      - name: Install Chrome and ChromeDriver
+        run: |
+          # Install Chrome
+          wget -q -O /tmp/google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt-get update
+          sudo apt-get install -y /tmp/google-chrome-stable.deb
+          
+          # Get Chrome version
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
+          echo "Chrome version: $CHROME_VERSION"
+          
+          # Download matching ChromeDriver
+          wget -q -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}/chromedriver_linux64.zip"
+          unzip -q /tmp/chromedriver.zip -d /tmp/
+          sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+          
+          # Verify
+          chromedriver --version
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Run tests
         env:
-          SE_EVENT_BUS_HOST: localhost
-          SE_EVENT_BUS_PUBLISH_PORT: 4442
-          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+          CI_CHROMEDRIVER_PATH: /usr/local/bin/chromedriver
         run: ./gradlew test --no-daemon
 
       - name: Upload test reports

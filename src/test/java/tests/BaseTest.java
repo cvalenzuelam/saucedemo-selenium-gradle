@@ -14,10 +14,20 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
+        String ciChromeDriver = System.getenv("CI_CHROMEDRIVER_PATH");
+        if (ciChromeDriver != null && !ciChromeDriver.isEmpty()) {
+            System.setProperty("webdriver.chrome.driver", ciChromeDriver);
+        }
+        
         System.setProperty("webdriver.chrome.silentOutput", "true");
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
 
         ChromeOptions options = new ChromeOptions();
+        
+        if (ciChromeDriver != null && !ciChromeDriver.isEmpty()) {
+            options.setBinary("/usr/bin/google-chrome");
+        }
+        
         options.addArguments("--headless=new"); 
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
