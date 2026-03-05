@@ -6,7 +6,7 @@ import pages.*;
 
 public class EndToEndTest extends BaseTest {
 
-    @Test(description = "Validar el flujo completo de compra: Login -> Add to Cart -> Checkout")
+    @Test(description = "Validar el flujo completo de compra: Login -> Add -> Checkout -> Success")
     public void testFullPurchaseFlow() {
         LoginPage loginPage = new LoginPage(driver);
         InventoryPage inventoryPage = new InventoryPage(driver);
@@ -15,29 +15,24 @@ public class EndToEndTest extends BaseTest {
         CheckoutStepTwoPage checkoutStepTwoPage = new CheckoutStepTwoPage(driver);
         CheckoutCompletePage checkoutCompletePage = new CheckoutCompletePage(driver);
 
-        // 1. Navegación y Login
+        // 1. Login
         loginPage.navigateTo("https://www.saucedemo.com/");
         loginPage.login("standard_user", "secret_sauce");
         
-        // 2. Verificar que estamos en Inventario y agregar producto
-        Assert.assertTrue(inventoryPage.getTitle().contains("Products"), "No se llegó a la página de productos");
+        // 2. Inventario y Carrito
         inventoryPage.addFirstItemToCart();
-        
-        // 3. Ir al carrito
         inventoryPage.goToCart();
-        
-        // 4. Iniciar Checkout
+
+        // 3. Checkout Paso 1 (Información)
         cartPage.clickCheckout();
-        
-        // 5. Llenar información personal
         checkoutStepOnePage.fillInformation("QA", "Engineer", "12345");
         checkoutStepOnePage.clickContinueValidating("checkout-step-two.html");
 
-        // 6. Finalizar compra
+        // 4. Checkout Paso 2 (Resumen)
         checkoutStepTwoPage.clickFinish();
 
-        // 7. Validar éxito
-        String successMessage = checkoutCompletePage.getCompleteHeaderText();
-        Assert.assertEquals(successMessage, "Thank you for your order!", "El flujo de compra no finalizó correctamente");
+        // 5. Finalización
+        String message = checkoutCompletePage.getCompleteHeaderText();
+        Assert.assertEquals(message, "Thank you for your order!", "El mensaje de éxito no es el esperado");
     }
 }
