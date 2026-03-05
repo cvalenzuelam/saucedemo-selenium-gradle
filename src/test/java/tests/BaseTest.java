@@ -14,38 +14,32 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        String ciChromeDriver = System.getenv("CI_CHROMEDRIVER_PATH");
-        if (ciChromeDriver != null && !ciChromeDriver.isEmpty()) {
-            System.setProperty("webdriver.chrome.driver", ciChromeDriver);
-        }
-        
+        // Silenciamos logs innecesarios
         System.setProperty("webdriver.chrome.silentOutput", "true");
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
 
         ChromeOptions options = new ChromeOptions();
         
-        if (ciChromeDriver != null && !ciChromeDriver.isEmpty()) {
-            options.setBinary("/usr/bin/google-chrome");
-        }
-        
+        // Modo Headless moderno y estable
         options.addArguments("--headless=new"); 
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
-        options.addArguments("--disable-setuid-sandbox");
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
+        
+        // Desactivamos telemetría y extensiones para velocidad en CI
         options.addArguments("--disable-extensions");
-        options.addArguments("--disable-translate");
         options.addArguments("--disable-features=VizDisplayCompositor");
         
         options.setCapability("goog:loggingPrefs", java.util.Map.of("browser", "OFF", "driver", "OFF"));
-        options.setCapability("acceptInsecureCerts", true);
 
         driver = new ChromeDriver(options);
+        
+        // Timeouts de red y carga
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        
+        // NOTA: No usamos implicitlyWait para evitar conflictos con WebDriverWait en BasePage
     }
 
     @AfterMethod(alwaysRun = true)
