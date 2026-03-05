@@ -26,6 +26,9 @@ test {
         parallel = 'none'
     }
     
+    // Forzar el uso del cliente HTTP de JDK para evitar problemas de red en CI
+    systemProperty "webdriver.http.factory", "jdk-http-client"
+    
     systemProperties = System.getProperties()
     outputs.upToDateWhen { false }
     
