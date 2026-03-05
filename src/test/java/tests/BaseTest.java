@@ -5,6 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +15,8 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        
         // Silenciamos los logs de Selenium y CDP que ensucian el CI
         System.setProperty("webdriver.chrome.silentOutput", "true");
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
