@@ -20,6 +20,11 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Install Google Chrome
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
