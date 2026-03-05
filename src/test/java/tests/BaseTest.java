@@ -5,7 +5,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,9 +14,6 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        
-        // Silenciamos los logs de Selenium y CDP que ensucian el CI
         System.setProperty("webdriver.chrome.silentOutput", "true");
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
 
@@ -29,12 +25,17 @@ public class BaseTest {
         options.addArguments("--disable-setuid-sandbox");
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--disable-extensions");
+        options.addArguments("--disable-translate");
+        options.addArguments("--disable-features=VizDisplayCompositor");
         
-        // Evita el error de CDP silenciando las notificaciones de logs del navegador
         options.setCapability("goog:loggingPrefs", java.util.Map.of("browser", "OFF", "driver", "OFF"));
+        options.setCapability("acceptInsecureCerts", true);
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
+        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @AfterMethod(alwaysRun = true)

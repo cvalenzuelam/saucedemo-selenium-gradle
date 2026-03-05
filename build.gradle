@@ -10,11 +10,8 @@ repositories {
 }
 
 dependencies {
-    // Selenium Java
+    // Selenium Java (includes Selenium Manager for automatic driver management)
     implementation 'org.seleniumhq.selenium:selenium-java:4.28.1'
-    
-    // WebDriver Manager for automatic driver management
-    implementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
     
     // TestNG
     testImplementation 'org.testng:testng:7.10.2'
