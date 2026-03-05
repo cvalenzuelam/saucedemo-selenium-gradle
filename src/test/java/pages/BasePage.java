@@ -20,20 +20,25 @@ public class BasePage {
     }
 
     public void waitForPageLoad() {
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+        new WebDriverWait(driver, Duration.ofSeconds(30)).until(
+            d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete")
+        );
     }
 
     protected WebElement findElement(By locator) {
+        // Esperamos a que esté presente Y sea visible
+        wait.until(ExpectedConditions.presenceOfElementLocated(locator));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     public void click(By locator) {
         try {
+            // Aseguramos visibilidad y que sea clickeable
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
             element.click();
         } catch (Exception e) {
-            // Backup con JavaScript si el clic nativo falla en Headless
+            // Backup total con JS
             jsClick(locator);
         }
     }
@@ -45,7 +50,7 @@ public class BasePage {
 
     public void type(By locator, String text) {
         WebElement element = findElement(locator);
-        // Limpiamos con teclas para máxima compatibilidad
+        // Limpiamos con teclas
         element.sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.BACK_SPACE);
         if (text != null && !text.isEmpty()) {
             element.sendKeys(text);

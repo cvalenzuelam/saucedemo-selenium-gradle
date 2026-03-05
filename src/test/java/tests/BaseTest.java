@@ -1,5 +1,6 @@
 package tests;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,18 +18,16 @@ public class BaseTest {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
         
-        // Optimizaciones clave para CI
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-infobars");
-        options.addArguments("--no-first-run");
-        options.addArguments("--no-default-browser-check");
+        // Forzamos la resolución desde los argumentos
+        options.addArguments("--window-size=1920,1080");
 
         driver = new ChromeDriver(options);
         
-        // Configuración de timeouts de Selenium
+        // Doble aseguramiento de resolución
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+        
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
     }
@@ -39,7 +38,7 @@ public class BaseTest {
             try {
                 driver.quit();
             } catch (Exception e) {
-                // Si falla al cerrar, no queremos que rompa el reporte
+                // Ignore
             }
         }
     }

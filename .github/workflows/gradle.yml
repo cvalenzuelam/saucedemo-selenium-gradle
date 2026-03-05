@@ -26,9 +26,8 @@ jobs:
       run: chmod +x gradlew
 
     - name: Run Tests
-      # We add --continue to try running all tests even if some fail, 
-      # so we can see all the results in the report.
-      run: ./gradlew test --continue
+      # Agregamos --info para ver los fallos detallados en la consola de GitHub
+      run: ./gradlew test --continue --info
 
     - name: Upload Test Report
       if: always() # This ensures the report is uploaded even if the tests fail
