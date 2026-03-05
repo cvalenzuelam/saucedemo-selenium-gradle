@@ -1,23 +1,31 @@
 # Saucedemo Selenium Automation (Gradle + TestNG)
 
-Proyecto de automatización de pruebas para la página [Saucedemo](https://www.saucedemo.com/) utilizando **Selenium WebDriver**, **Java**, **Gradle** y **TestNG**.
+Proyecto profesional de automatización de pruebas para [Saucedemo](https://www.saucedemo.com/).
 
 ## 🚀 Características
-- **Page Object Model (POM)**: Estructura organizada y mantenible.
-- **CI/CD con GitHub Actions**: Ejecución automática de pruebas en cada `push`.
-- **Modo Headless**: Configurado para correr en servidores sin interfaz gráfica (ideal para Jenkins/GitHub Actions).
+- **Page Object Model (POM)**: Estructura profesional y mantenible.
+- **CI/CD Ready**: Configurado para GitHub Actions.
+- **Modo Flexible**: Soporte para ejecuciones con y sin interfaz gráfica.
+- **Sincronización Robusta**: Uso exclusivo de `WebDriverWait` y limpieza de campos mediante simulación de teclado.
 
-## 🛠️ Requisitos
-- Java 17+
-- Gradle (incluido via `gradlew`)
+## 🏃 Ejecución Local
 
-## 🏃 Cómo ejecutar las pruebas localmente
-1. Clona el repositorio.
-2. Ejecuta el comando:
-   ```bash
-   ./gradlew test
-   ```
+Por defecto, los tests corren en modo **Headless** (sin abrir ventana).
+
+### Ver el navegador mientras corre (UI Mode)
+Si quieres ver el navegador Chrome físicamente mientras se ejecutan las pruebas:
+```bash
+./gradlew clean test -Dheadless=false
+```
+
+### Correr en modo silencioso (Headless)
+```bash
+./gradlew clean test -Dheadless=true
+```
 
 ## 📊 Reportes
-Los resultados de las pruebas se generan en:
+Al finalizar, puedes ver el reporte visual en:
 `build/reports/tests/test/index.html`
+
+## ⚙️ CI/CD
+Cada `push` a la rama `main` dispara automáticamente la suite en GitHub Actions bajo el entorno `ubuntu-latest`.

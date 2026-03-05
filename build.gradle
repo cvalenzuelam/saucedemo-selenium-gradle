@@ -20,11 +20,12 @@ dependencies {
 test {
     useTestNG() {
         suites 'src/test/resources/suites/testng.xml'
-        // Desactivamos cualquier paralelismo que pueda estar rompiendo el CI
         parallel = 'none'
     }
     
-    // Forzamos que los tests siempre se ejecuten, incluso si no han cambiado
+    // Permite pasar propiedades como -Dheadless=false desde la terminal
+    systemProperties = System.getProperties()
+    
     outputs.upToDateWhen { false }
     
     // Queremos ver los resultados en la consola de GitHub Actions
