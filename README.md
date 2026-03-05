@@ -1,5 +1,7 @@
 # Saucedemo Selenium Automation (Gradle + TestNG)
 
+![SauceDemo UI Tests CI](https://github.com/cvalenzuelam/saucedemo-selenium-gradle/actions/workflows/tests.yml/badge.svg)
+
 Proyecto profesional de automatización de pruebas para [Saucedemo](https://www.saucedemo.com/).
 
 ## 🚀 Características
